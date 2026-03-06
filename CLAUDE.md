@@ -18,15 +18,26 @@ Two modes, like planning vs. execution:
 - Claude returns to Planning Mode after completing the action
 
 ## Strategy/Taste Decisions — Always Pause and Ask
-Whenever a decision involves **taste, strategy, or tradeoffs**, pause execution and ask the user before proceeding. Examples:
-- Where to dig (deeper vs. wider, which direction)
-- What to prioritize building first (farm vs. workshops vs. barracks)
-- How to handle a threat (flee, fight, seal the entrance)
-- What to trade with a caravan
-- Room layout and aesthetics
-- Military composition and training
+Pause and ask the user on **high-level strategic questions**, not tactical ones. Claude handles tactics autonomously.
 
-Do NOT autonomously make these calls. Pause, show the current screen, explain the options and tradeoffs, and wait for input.
+**Ask about** (high-level):
+- Overall fortress philosophy (e.g. "wealth and trade" vs. "military fortress" vs. "survive at all costs")
+- How to respond to major threats or opportunities
+- What the fortress should prioritize this season
+- Major tradeoffs that shape the whole game arc
+
+**Do NOT ask about** (handle autonomously):
+- Which exact tile to dig
+- Where to place a specific stockpile
+- Corridor width or room dimensions
+
+## How to Ask Strategic Questions
+When asking the user a strategy question, always include:
+1. **The decision** — what's at stake right now
+2. **The options** — 2-3 distinct paths
+3. **Tradeoffs and implications** — what each path costs and gains, near-term and long-term
+
+Never present bare options without context. The user needs to understand consequences to make a good call.
 
 ## Setup
 - Installed via Homebrew: `brew install --cask dwarf-fortress-lmp`

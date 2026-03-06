@@ -67,7 +67,7 @@ After saving the narrative, always commit and push: `git add CLAUDE.md && git co
 
 ## Chronicle
 
-### The Founding of Libashedan, "Axestirred" — Early Spring, Year 1
+### The Founding of Libashedan, "Axestirred" — Early to Mid Spring, Year 1
 
 Seven dwarves arrived in The Eviscerated Spikes, a freezing mountain region with no trees but thick other vegetation. The site chosen was along a river (Jmpdshngl th Slvry C), with a great mountain to the west ripe for delving. The surroundings were calm — for now — though jaguars were rumored to prowl the wilds.
 
@@ -75,4 +75,10 @@ The expedition leader pressed 'e' to embark and selected "Play Now!" — no care
 
 Upon arrival, the intro scroll read: *"Strike the earth!"* A supply caravan was expected before winter. The dwarves had all of spring and summer to dig lodgings before the cold entombed them.
 
-Claude opened the Designations menu and was navigating toward the mountain face to begin mining — the first step toward shelter — when the session was interrupted.
+**The Strategy Chosen: Trading Hub.** With no trees and a freezing climate, the mountain itself would be the fortress's salvation. Stone crafts for the autumn caravan. The seven specialists: Dastot Vúshurist (Miner), Edëm Obokgusgash (Woodworker), Bim Kosothtâmol (Expedition Leader), Athel Dolushdegël (Stoneworker), Thîkut Asmelodshith (Jeweler), Dumat èrithidok (Fish Cleaner), and Lorbam Rigòthodkish (Fisherdwarf).
+
+**The First Delving.** Mining designations were placed along the mountain face. Dastot carved the earth. However, early confusion with DF's designation controls led to an unintended series of *down staircases* rather than a horizontal entrance hall — the miner pressed `j` (Down Stair) instead of flat-mining. The result: a cluster of descending shafts rather than a proper fortress entrance. Stone boulders (σ, Æ, ÷) were carried out as evidence of completed work.
+
+**The Great Idleness.** By 14th Slate (mid-Spring), all seven dwarves stood idle. The surface-level designations had been fully completed — staircases dug, stones hauled. New mining designations were placed on the z-level below, accessible via the newly-dug down-stairs. Dastot and companions briefly rested (Sleep job), then rose again. The mine continued to be worked.
+
+**Current State — Mid Spring, Year 1.** The fortress has a shaft of down-stairs entering the mountain. Some stones have been harvested. No workshops have been built yet. No trade depot. The autumn caravan is coming and the dwarves have not yet begun producing crafts. Time is short.

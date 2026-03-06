@@ -41,6 +41,8 @@ When asking the user for any input or decision, ALWAYS show the full DF screen f
 ## Narrative Chronicle Rule
 On every conversation compaction, write a narrative-style summary of what has happened in the game so far and append/update it in the **## Chronicle** section below. Write it like a dwarven saga — what was attempted, what succeeded, what perished.
 
+After saving the narrative, always commit and push: `git add CLAUDE.md && git commit -m "Chronicle: <brief description>" && git push`
+
 ## Chronicle
 
 ### The Founding of Libashedan, "Axestirred" — Early Spring, Year 1

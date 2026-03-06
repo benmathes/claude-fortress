@@ -60,6 +60,101 @@ When asking the user for any input or decision, ALWAYS show the full DF screen f
 ## Game Instance
 - DF app bundle installed by Homebrew cask at: `/Applications/Dwarf Fortress LMP/`
 
+## Learning Loop
+When something feels off (dwarves idle, can't control screen, designations not working):
+1. **Debug first**: Capture screen, read the current state carefully, check LEARNINGS.md for known issues
+2. **Log the fix**: After resolving, update `.claude/LEARNINGS.md` with what went wrong and the fix
+3. **Commit learnings**: `git add .claude/LEARNINGS.md && git commit -m "LEARNINGS: <brief>"`
+
+Never repeat the same mistake twice. Always consult LEARNINGS.md at session start.
+
+## Dwarf Fortress Controls Reference
+Source: https://dwarffortresswiki.org/index.php/DF2014:Controls
+
+### Essential Navigation
+| Key | Action |
+|-----|--------|
+| Arrow keys | Move cursor / scroll map |
+| Shift+Arrow | Fast cursor movement |
+| `<` / `>` | Z-level up / down |
+| `Space` | Pause / unpause |
+| `.` (period) | Advance one tick (while paused) |
+| `Tab` | Switch map/menu focus |
+| `ESC` | Cancel current menu OR opens Options if at top-level |
+
+### CRITICAL: ESC Behavior
+- In a **submenu** (designations, build, etc.): ESC cancels back to game
+- At **top-level game view** (no submenu open): ESC opens Options dialog ("Return to Game", "Save", "Abandon")
+- To close Options dialog → select "Return to Game" and press Enter
+- **Do NOT press ESC twice** — it will open Options and you'll be stuck
+
+### Main Game Menus (press key from game view)
+| Key | Menu |
+|-----|------|
+| `d` | Designations submenu |
+| `b` | Build structures |
+| `p` | Stockpiles |
+| `u` | Unit list |
+| `j` | Job list |
+| `z` | Status screen |
+| `m` | Military |
+| `k` | Look at tile |
+
+### Designation Submenu (`d` → ...)
+**WARNING: In designation mode, hjkl are NOT cursor keys — they are designation type shortcuts!**
+| Key | Designation |
+|-----|-------------|
+| `d` | Mine (dig out solid rock) |
+| `h` | Channel (dig down, creates ramp) |
+| `u` | Up staircase |
+| `j` | Down staircase |
+| `i` | Up/Down staircase |
+| `r` | Up ramp |
+| `t` | Chop trees |
+| `s` | Smooth stone |
+| `e` | Engrave stone |
+| `x` | Remove designation |
+| Arrow keys | Move cursor (ALWAYS use arrows, never hjkl) |
+| `Enter` | Anchor selection start / confirm selection |
+| `ESC` | Exit designation mode |
+
+### Build Submenu (`b` → ...)
+| Key | Structure |
+|-----|-----------|
+| `w` | Workshop |
+| `d` | Trade depot |
+| `f` | Furnace |
+| `s` | Siege engine |
+
+### Workshop Submenu (`b` → `w` → ...)
+| Key | Workshop type |
+|-----|---------------|
+| `r` | Craftsdwarf's workshop |
+| `c` | Carpenter's workshop |
+| `m` | Mason's workshop |
+| `s` | Still |
+| `f` | Farmer's workshop |
+
+### Unit List (`u`)
+| Key | Action |
+|-----|--------|
+| Arrow up/down | Navigate units |
+| `z` | Jump map view to selected unit |
+| `Enter` | View unit details |
+
+### Tile Symbols Reference
+| Symbol | Meaning |
+|--------|---------|
+| `▓` | Solid unexcavated rock |
+| `·` | Open floor / excavated tile |
+| `>` | Down staircase (completed) |
+| `<` | Up staircase (completed) |
+| `▼` | Down ramp or slope |
+| `▲` | Up ramp or slope |
+| `☺` | Dwarf |
+| `σ Æ ÷` | Stone boulders (hauled material) |
+| Red `>>` (ANSI 31m) | Pending mine designation |
+
 ## Narrative Chronicle Rule
 On every conversation compaction, write a narrative-style summary of what has happened in the game so far and append/update it in the **## Chronicle** section below. Write it like a dwarven saga — what was attempted, what succeeded, what perished.
 

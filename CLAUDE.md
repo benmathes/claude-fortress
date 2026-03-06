@@ -17,6 +17,17 @@ Two modes, like planning vs. execution:
 - Claude narrates what it's doing as it does it
 - Claude returns to Planning Mode after completing the action
 
+## Strategy/Taste Decisions — Always Pause and Ask
+Whenever a decision involves **taste, strategy, or tradeoffs**, pause execution and ask the user before proceeding. Examples:
+- Where to dig (deeper vs. wider, which direction)
+- What to prioritize building first (farm vs. workshops vs. barracks)
+- How to handle a threat (flee, fight, seal the entrance)
+- What to trade with a caravan
+- Room layout and aesthetics
+- Military composition and training
+
+Do NOT autonomously make these calls. Pause, show the current screen, explain the options and tradeoffs, and wait for input.
+
 ## Setup
 - Installed via Homebrew: `brew install --cask dwarf-fortress-lmp`
 - Classic ASCII version with DFHack

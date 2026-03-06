@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pgrep:*)",
+      "Bash(brew search:*)",
+      "Bash(brew info:*)",
+      "Bash(arch:*)",
+      "Bash(tmux new-session:*)",
+      "Bash(tmux:*)",
+      "Bash(python3:*)",
+      "Bash(claude config:*)",
+      "Bash(CLAUDECODE= claude config:*)",
+      "Bash(do tmux:*)"
+    ]
+  }
+}

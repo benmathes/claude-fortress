@@ -92,3 +92,53 @@ When resuming a session or something feels broken:
 5. Check `*PAUSED*` → Space to unpause if needed
 6. Check Idlers count — if > 0, investigate why
 7. Press `j` (from game view) to check job list
+
+---
+
+## No Mining Jobs in Queue = Designations Are Suspended or Invalid
+
+**Problem**: All dwarves idle, red `>>` designations visible on map, but `j` (job list) shows NO mining jobs at all — not even unassigned ones.
+
+**Root Cause**: When DF can't path to a designation, it auto-suspends it. Suspended designations still show on map but generate no jobs. Alternatively, down-staircase designations (`d→j`) may be invalid if placed on inaccessible tiles.
+
+**Diagnostic**: Press `j` from main game view. If zero mining jobs appear despite visible red designations, the designations are suspended/invalid — NOT a labor problem.
+
+**Fix options to try next session**:
+1. Cancel ALL existing designations (`d → x`, box-select whole area, Enter)
+2. Make a brand new **plain mine** designation (`d → d`) on solid rock (`▓`) directly adjacent to where dwarves are standing
+3. If that job still doesn't appear in `j` list → pathfinding is broken, check Z-levels
+4. If job appears but Dastot ignores it → THEN check his mining labor via `v` from main map
+
+**Signpost**: Job list empty = designation problem. Job list shows mining job = labor/dwarf problem.
+
+---
+
+## `v` from Unit List ≠ Full Labor Profile
+
+**Problem**: Pressing `v` from unit list (`u → v`) opens a limited unit view with only "Thoughts", "Relationships", "Customize" options — NO labor tab.
+
+**Fix**: To see full labor profile, must access via main map `v` key (positions cursor on nearest unit). From unit list, `y` (Customize) only shows nickname/profession rename — not labor.
+
+**Note**: Labor management in DF 0.47 Classic is notoriously hard to reach without DFHack. With DFHack unresponsive, labor checking is very difficult via vanilla menus.
+
+---
+
+## Down Staircase vs. Plain Mine Designations
+
+- `d → d` = plain Mine (digs out a floor tile, leaves walls). Shows as highlighted `▓` in red when pending.
+- `d → j` = Down Staircase (carves a `>` staircase going down a Z-level). Shows as red `>` when pending.
+- The previous session accidentally created down-staircase designations, not plain mines.
+- **Prefer `d → d` (plain mine) for initial digging** — simpler, clearer feedback.
+
+---
+
+## Session State Recovery Checklist (Updated)
+
+When resuming a session or something feels broken:
+1. `tmux capture-pane -t df -p -e` — capture current screen
+2. Check top bar: paused? what mode? no `*PAUSED*` = running
+3. If in Options menu → press Enter to "Return to Game"
+4. If in unknown submenu → ESC once carefully (NOT twice — second ESC opens Options)
+5. Press `j` (from game view) to check job list — if empty despite designations, they're suspended
+6. If starting fresh: cancel old designations, make new `d → d` plain mine on adjacent rock tile
+7. Unpause with Space, wait 2-3 real seconds, pause again, check `j` list for new jobs

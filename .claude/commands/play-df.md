@@ -37,14 +37,19 @@ tmux capture-pane -t df -p -e 2>/dev/null
 - **Session exists, screen shows active fortress** → continue from current state, no action needed
 - **Session exists, screen shows Options menu** → press Enter to return to game
 
-## Step 3: Open a watch window
+## Step 3: Open a watch window (only if needed)
 
-Open a terminal window so the user can watch live:
+Check if a watch window is already attached:
+```bash
+tmux list-clients -t df 2>/dev/null
+```
+
+If no clients are listed (or only read-only ones), open a new terminal:
 ```bash
 osascript -e 'tell application "Terminal" to do script "tmux attach -t df"'
 ```
 
-(Skip if a watch window is already open — this is idempotent too: attaching twice is harmless.)
+If clients already exist, skip this step — don't open a redundant tab.
 
 ## Step 4: Launch the local model player
 

@@ -107,13 +107,12 @@ def log_snapshot(step, screen):
 
 
 def main():
+    global MODEL
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default=MODEL)
     parser.add_argument("--delay", type=float, default=LOOP_DELAY)
     parser.add_argument("--max-steps", type=int, default=200)
     args = parser.parse_args()
-
-    global MODEL
     MODEL = args.model
 
     # Start fresh log for this session

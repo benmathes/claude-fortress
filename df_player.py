@@ -117,6 +117,19 @@ def is_paused(screen):
     return "*PAUSED*" in screen
 
 
+def detect_screen(screen):
+    """Return a human-readable screen type to inject into the model context."""
+    if "Return to Game" in screen and "Save Game" in screen:
+        return "OPTIONS MENU"
+    if ("d: Designations" in screen or "Designations" in screen) and "Unit List" in screen:
+        return "MAIN GAME VIEW"
+    if "v: View Unit" in screen and "z: Go to Unit" in screen:
+        return "JOB LIST (shows dwarf names and current jobs)"
+    if "Mine" in screen and "Channel" in screen and "Up Stair" in screen:
+        return "DESIGNATION SUBMENU (d key menu)"
+    return "UNKNOWN SUBMENU"
+
+
 def is_main_view(screen):
     """Accept main game view OR job list (both are valid states for model decisions)."""
     # Main game view: right panel has Designations + Unit List
@@ -200,7 +213,8 @@ def main():
             log("⚠️  Could not reach main view after 5 attempts — stopping")
             break
 
-        context = f"Step {step}. Last key pressed: {last_key or 'none'}"
+        screen_type = detect_screen(clean)
+        context = f"Step {step}. YOU ARE ON: {screen_type}. Last key pressed: {last_key or 'none'}"
         if is_paused(clean):
             context += " [GAME IS PAUSED]"
 

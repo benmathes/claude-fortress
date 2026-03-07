@@ -142,3 +142,18 @@ When resuming a session or something feels broken:
 5. Press `j` (from game view) to check job list — if empty despite designations, they're suspended
 6. If starting fresh: cancel old designations, make new `d → d` plain mine on adjacent rock tile
 7. Unpause with Space, wait 2-3 real seconds, pause again, check `j` list for new jobs
+
+---
+
+## Local Model (7B) Cannot Reliably Play DF
+
+**Experiment**: Tried Qwen2.5-3B and Qwen2.5-7B via `llm-mlx` to drive keystrokes autonomously.
+
+**Result**: Both models got stuck in loops (pressing `j` or `Escape` repeatedly). Root causes:
+- One-key-at-a-time with no memory → loops
+- `Escape` from job list opens Options dialog, not game view
+- Model can't infer current menu state from ASCII art reliably
+
+**What helped but wasn't enough**: rolling action history, screen type detection, intercepting Escape, explicit decision tree in prompt.
+
+**Conclusion**: Small local models are too unreliable for DF's context-sensitive UI. Claude (Claude Sonnet) drives keystrokes directly — this works. Don't re-attempt local model driving unless using a 70B+ model or API model.

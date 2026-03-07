@@ -18,6 +18,8 @@ TMUX_SESSION = "df"
 LOOP_DELAY = 1.0  # seconds between actions
 SESSION_LOG = Path(__file__).parent / "session.log"
 SNAPSHOT_EVERY = 10  # capture full screen to log every N steps
+HISTORY_LEN = 10  # how many recent actions to include in each prompt
+STRATEGY_FILE = Path(__file__).parent / "strategy.md" 
 
 SYSTEM_PROMPT = """You are playing Dwarf Fortress Classic. You control the game one keystroke at a time.
 
@@ -80,8 +82,21 @@ def send_key(key):
         time.sleep(0.15)
 
 
-def ask_model(screen_content, context=""):
-    prompt = f"{context}\n\nCURRENT SCREEN:\n{screen_content}\n\nWhat key do you press?"
+def ask_model(screen_content, history, context=""):
+    strategy = STRATEGY_FILE.read_text() if STRATEGY_FILE.exists() else ""
+    history_text = "\n".join(f"  {i+1}. {h}" for i, h in enumerate(history)) or "  (none yet)"
+    prompt = f"""{context}
+
+CURRENT STRATEGY:
+{strategy}
+
+RECENT ACTIONS (oldest to newest):
+{history_text}
+
+CURRENT SCREEN:
+{screen_content}
+
+What is your next single action?"""
     result = subprocess.run(
         ["llm", "-m", MODEL, "-s", SYSTEM_PROMPT, prompt],
         capture_output=True, text=True, timeout=30
@@ -164,6 +179,7 @@ def main():
     step = 0
     last_key = ""
     consecutive_same = 0
+    history = []  # rolling list of recent actions
 
     while step < args.max_steps:
         step += 1
@@ -185,7 +201,7 @@ def main():
 
         log(f"Step {step} — querying model...")
         try:
-            response = ask_model(clean, context)
+            response = ask_model(clean, history[-HISTORY_LEN:], context)
         except subprocess.TimeoutExpired:
             log("⚠️  Model timed out — skipping step")
             continue
@@ -211,6 +227,7 @@ def main():
 
         last_key = response
         log(f"  Pressing: {repr(response)}")
+        history.append(f"pressed {repr(response)}")
         send_key(response)
         time.sleep(args.delay)
 

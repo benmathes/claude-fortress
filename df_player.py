@@ -2,7 +2,7 @@
 """
 df_player.py — Local model drives DF keystrokes. Claude supervises.
 
-Usage: python df_player.py [--model mlx-community/Qwen2.5-3B-Instruct-4bit]
+Usage: python df_player.py [--model mlx-community/Qwen2.5-7B-Instruct-4bit]
 """
 
 import subprocess
@@ -13,7 +13,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 
-MODEL = "mlx-community/Qwen2.5-3B-Instruct-4bit"
+MODEL = "mlx-community/Qwen2.5-7B-Instruct-4bit"
 TMUX_SESSION = "df"
 LOOP_DELAY = 1.0  # seconds between actions
 SESSION_LOG = Path(__file__).parent / "session.log"

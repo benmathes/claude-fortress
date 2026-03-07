@@ -88,6 +88,27 @@ def is_paused(screen):
     return "*PAUSED*" in screen
 
 
+def is_main_view(screen):
+    """Detect main game view by presence of the right-panel menu landmarks."""
+    return "Designations" in screen and "Unit List" in screen and "Job List" in screen
+
+
+def ensure_main_view():
+    """Press Escape until we're back at the main game view. Max 5 attempts."""
+    for _ in range(5):
+        screen = strip_ansi(capture_screen())
+        if "Return to Game" in screen and "Save Game" in screen:
+            log("\u26a0\ufe0f  Options menu \u2014 pressing Enter")
+            send_key("Enter")
+            time.sleep(0.5)
+        elif is_main_view(screen):
+            return True
+        else:
+            send_key("Escape")
+            time.sleep(0.4)
+    return is_main_view(strip_ansi(capture_screen()))
+
+
 def log(msg, also_file=True):
     ts = datetime.now().strftime("%H:%M:%S")
     line = f"[{ts}] {msg}"
@@ -138,12 +159,10 @@ def main():
         if step % SNAPSHOT_EVERY == 1:
             log_snapshot(step, clean)
 
-        # Safety: detect Options menu and handle it
-        if "Return to Game" in clean and "Save Game" in clean:
-            log("⚠️  Options menu detected — pressing Enter to return")
-            send_key("Enter")
-            time.sleep(0.5)
-            continue
+        # Normalize to main game view before asking the model anything
+        if not ensure_main_view():
+            log("⚠️  Could not reach main view after 5 attempts — stopping")
+            break
 
         context = f"Step {step}. Last key pressed: {last_key or 'none'}"
         if is_paused(clean):

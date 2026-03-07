@@ -41,10 +41,14 @@ STEP 2 — CANCEL OLD DESIGNATIONS: press d to open designations menu, then x fo
   - Press Enter to start selection, move to cover the area, press Enter to confirm
   - Press Escape when done cancelling
 
-STEP 3 — PLACE NEW MINE: press d to open designations menu, then d again for plain Mine
-  - Move cursor with arrow keys to a solid rock tile (shows as ▓) adjacent to where dwarves stand
-  - Press Enter to anchor start, move 1-2 tiles to select a small area, press Enter to confirm
-  - Press Escape when done
+STEP 3 — PLACE NEW MINE (multi-step sequence):
+  a. Press d → opens designation menu (right panel changes)
+  b. Press d → enters Mine designation mode (cursor appears on map)
+  c. Use arrow keys to move cursor onto a solid rock tile (▓) near the surface entrance
+  d. Press Enter → anchors the start corner
+  e. Press Enter again → confirms the designation (you'll see it highlighted in red)
+  f. Press Escape → exits designation mode back to main view
+  IMPORTANT: You must press Enter TWICE to place a designation. d,d alone does nothing.
 
 STEP 4 — VERIFY: press j to check job list again
   - If mining jobs now appear → press Escape, press Space to unpause, let them work

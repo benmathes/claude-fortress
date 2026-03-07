@@ -11,10 +11,13 @@ import sys
 import argparse
 import re
 from datetime import datetime
+from pathlib import Path
 
 MODEL = "mlx-community/Qwen2.5-3B-Instruct-4bit"
 TMUX_SESSION = "df"
 LOOP_DELAY = 1.0  # seconds between actions
+SESSION_LOG = Path(__file__).parent / "session.log"
+SNAPSHOT_EVERY = 10  # capture full screen to log every N steps
 
 SYSTEM_PROMPT = """You are a Dwarf Fortress player. You control the game by sending single keystrokes.
 
@@ -85,9 +88,22 @@ def is_paused(screen):
     return "*PAUSED*" in screen
 
 
-def log(msg):
+def log(msg, also_file=True):
     ts = datetime.now().strftime("%H:%M:%S")
-    print(f"[{ts}] {msg}", flush=True)
+    line = f"[{ts}] {msg}"
+    print(line, flush=True)
+    if also_file:
+        with open(SESSION_LOG, "a") as f:
+            f.write(line + "\n")
+
+
+def log_snapshot(step, screen):
+    """Write a full screen snapshot to the log for chronicle purposes."""
+    ts = datetime.now().strftime("%H:%M:%S")
+    with open(SESSION_LOG, "a") as f:
+        f.write(f"\n--- SCREEN SNAPSHOT step={step} at {ts} ---\n")
+        f.write(screen)
+        f.write(f"--- END SNAPSHOT ---\n\n")
 
 
 def main():
@@ -100,7 +116,13 @@ def main():
     global MODEL
     MODEL = args.model
 
+    # Start fresh log for this session
+    with open(SESSION_LOG, "w") as f:
+        f.write(f"=== DF Player Session {datetime.now().isoformat()} ===\n")
+        f.write(f"Model: {MODEL}\n\n")
+
     log(f"Starting DF player with model: {MODEL}")
+    log(f"Session log: {SESSION_LOG}")
     log("Press Ctrl+C to stop and hand back to Claude")
     print()
 
@@ -112,6 +134,10 @@ def main():
         step += 1
         screen = capture_screen()
         clean = strip_ansi(screen)
+
+        # Periodic screen snapshot for chronicle
+        if step % SNAPSHOT_EVERY == 1:
+            log_snapshot(step, clean)
 
         # Safety: detect Options menu and handle it
         if "Return to Game" in clean and "Save Game" in clean:
@@ -136,6 +162,7 @@ def main():
         if response.upper().startswith("STOP"):
             reason = response[5:].strip(": ")
             log(f"🛑 Model requested stop: {reason}")
+            log_snapshot(step, clean)
             log("Handing control back to Claude.")
             break
 
@@ -144,6 +171,7 @@ def main():
             consecutive_same += 1
             if consecutive_same >= 4:
                 log(f"⚠️  Model stuck pressing {repr(response)} repeatedly — stopping")
+                log_snapshot(step, clean)
                 break
         else:
             consecutive_same = 0
@@ -153,7 +181,9 @@ def main():
         send_key(response)
         time.sleep(args.delay)
 
-    log("Player loop ended.")
+    # Final snapshot for chronicle
+    log_snapshot(step, strip_ansi(capture_screen()))
+    log("Player loop ended. Read session.log to write the chronicle.")
 
 
 if __name__ == "__main__":

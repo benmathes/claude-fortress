@@ -29,7 +29,8 @@ Sequences: d,d means press d then d
 
 CRITICAL RULES:
 - NEVER use h/j/k/l for cursor movement — use Up/Down/Left/Right arrows only
-- NEVER press Escape twice in a row (second ESC opens the Options dialog)
+- NEVER use Escape. The script handles all navigation back to the main view automatically.
+- After pressing j to check jobs, if the list is empty, your next action should be d (to go to designations) — not Escape.
 - You are always shown the MAIN GAME VIEW. Do not try to open menus you are already in.
 
 YOUR STATE MACHINE — follow this decision tree every step:
@@ -202,6 +203,13 @@ def main():
             continue
 
         log(f"  Model says: {repr(response)}")
+
+        # Don't let the model navigate with Escape — the script owns that
+        if response.lower() in ("escape", "esc"):
+            log("  (intercepted Escape — script handles navigation, skipping)")
+            history.append("tried Escape (intercepted)")
+            time.sleep(args.delay)
+            continue
 
         if response.upper().startswith("STOP"):
             reason = response[5:].strip(": ")

@@ -19,37 +19,42 @@ LOOP_DELAY = 1.0  # seconds between actions
 SESSION_LOG = Path(__file__).parent / "session.log"
 SNAPSHOT_EVERY = 10  # capture full screen to log every N steps
 
-SYSTEM_PROMPT = """You are a Dwarf Fortress player. You control the game by sending single keystrokes.
+SYSTEM_PROMPT = """You are playing Dwarf Fortress Classic. You control the game one keystroke at a time.
 
-RULES:
-- Respond with ONLY the key(s) to press, nothing else
-- For special keys use: Enter, Escape, Up, Down, Left, Right, Space
-- For sequences use comma-separated: d,d  (means press d then d)
-- If you see the Options menu (Return to Game / Save Game) → respond: Enter
-- If something is seriously wrong that you can't fix → respond: STOP: <reason>
-- NEVER use h/j/k/l for cursor movement — always use arrow keys (Up/Down/Left/Right)
-- NEVER press Escape twice in a row
+OUTPUT FORMAT: Respond with ONLY a single key or comma-separated sequence. Nothing else. No explanation.
+Special keys: Enter, Escape, Up, Down, Left, Right, Space
+Sequences: d,d means press d then d
 
-CURRENT STRATEGY:
-1. Fix mining: cancel suspended designations, place fresh mine with d,d on solid rock (▓)
-2. Verify mining job appears in job list (j from main view)
-3. Build Craftsdwarf Workshop (b,w,r) for stone crafts
-4. Build Trade Depot (b,d) before autumn caravan
+CRITICAL RULES:
+- NEVER use h/j/k/l for cursor movement — use Up/Down/Left/Right arrows only
+- NEVER press Escape twice in a row (second ESC opens the Options dialog)
+- You are always shown the MAIN GAME VIEW. Do not try to open menus you are already in.
 
-KEY REFERENCE (main game view):
-- d: Designations menu
-- j: Job list (only from main view, NOT in designation mode)
-- u: Unit list
-- Space: Pause/unpause
-- Escape: Exit submenu (careful — at top level opens Options)
+YOUR STATE MACHINE — follow this decision tree every step:
 
-DESIGNATION SUBMENU keys:
-- d: Plain mine (preferred)
-- x: Cancel/remove designation
-- Enter: Anchor selection
-- Arrow keys: Move cursor
+STEP 1 — CHECK JOBS: press j to open job list
+  - If job list shows mining jobs → press Escape, then Space to unpause
+  - If job list is EMPTY → there are no valid mining designations. Press Escape, go to STEP 2.
 
-Respond with ONLY the key to press, or STOP: reason."""
+STEP 2 — CANCEL OLD DESIGNATIONS: press d to open designations menu, then x for remove/cancel
+  - Move cursor with arrow keys over any red ">>" tiles on the map
+  - Press Enter to start selection, move to cover the area, press Enter to confirm
+  - Press Escape when done cancelling
+
+STEP 3 — PLACE NEW MINE: press d to open designations menu, then d again for plain Mine
+  - Move cursor with arrow keys to a solid rock tile (shows as ▓) adjacent to where dwarves stand
+  - Press Enter to anchor start, move 1-2 tiles to select a small area, press Enter to confirm
+  - Press Escape when done
+
+STEP 4 — VERIFY: press j to check job list again
+  - If mining jobs now appear → press Escape, press Space to unpause, let them work
+  - If still empty → the rock is unreachable, try a different tile (STEP 3 again)
+
+STEP 5 — ONCE MINING WORKS, build workshops:
+  - Craftsdwarf workshop: b, w, r — place it, press Enter to confirm
+  - Trade depot: b, d — place it on open ground
+
+What is your next single action?"""
 
 
 def capture_screen():
@@ -89,8 +94,14 @@ def is_paused(screen):
 
 
 def is_main_view(screen):
-    """Detect main game view by presence of the right-panel menu landmarks."""
-    return "Designations" in screen and "Unit List" in screen and "Job List" in screen
+    """Detect main game view OR readable submenus (job list, etc)."""
+    # Main game view has these in the right panel
+    if "Designations" in screen and "Unit List" in screen and "Job List" in screen:
+        return True
+    # Job list is a valid state — model can read and decide
+    if "No Job" in screen and "Mine" in screen:
+        return True
+    return False
 
 
 def ensure_main_view():

@@ -31,6 +31,10 @@ CRITICAL RULES:
 - NEVER use h/j/k/l for cursor movement — use Up/Down/Left/Right arrows only
 - NEVER use Escape. The script handles all navigation back to the main view automatically.
 - After pressing j to check jobs, if the list is empty, your next action should be d (to go to designations) — not Escape.
+
+WHEN YOU SEE THE JOB LIST (screen shows dwarf names with 'No Job', 'Hunt', 'Mine' etc):
+- If NO Mine jobs exist → press d (opens designations). Do NOT press Escape.
+- If Mine jobs exist → press Space (unpause so dwarves work)
 - You are always shown the MAIN GAME VIEW. Do not try to open menus you are already in.
 
 YOUR STATE MACHINE — follow this decision tree every step:
@@ -114,9 +118,14 @@ def is_paused(screen):
 
 
 def is_main_view(screen):
-    """Detect main game view by right-panel landmarks only."""
-    # Main game view right panel always has all three of these
-    return ("d: Designations" in screen or "Designations" in screen) and            ("u: Unit List" in screen or ("Unit List" in screen and "Job List" in screen))
+    """Accept main game view OR job list (both are valid states for model decisions)."""
+    # Main game view: right panel has Designations + Unit List
+    if ("d: Designations" in screen or "Designations" in screen) and "Unit List" in screen:
+        return True
+    # Job list view: bottom shows "v: View Unit  z: Go to Unit"
+    if "v: View Unit" in screen and "z: Go to Unit" in screen:
+        return True
+    return False
 
 
 def ensure_main_view():

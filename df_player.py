@@ -113,14 +113,9 @@ def is_paused(screen):
 
 
 def is_main_view(screen):
-    """Detect main game view OR readable submenus (job list, etc)."""
-    # Main game view has these in the right panel
-    if "Designations" in screen and "Unit List" in screen and "Job List" in screen:
-        return True
-    # Job list is a valid state — model can read and decide
-    if "No Job" in screen and "Mine" in screen:
-        return True
-    return False
+    """Detect main game view by right-panel landmarks only."""
+    # Main game view right panel always has all three of these
+    return ("d: Designations" in screen or "Designations" in screen) and            ("u: Unit List" in screen or ("Unit List" in screen and "Job List" in screen))
 
 
 def ensure_main_view():
